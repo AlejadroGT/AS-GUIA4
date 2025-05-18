@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
-
+import { useContext } from "react";
 // Importa La función para decodificar JWT.
 import  { jwtDecode } from "jwt-decode";
 
@@ -50,7 +50,14 @@ return (
     <AuthContext.Provider value = {{ user, login, logout }}>
         {children}
     </AuthContext.Provider>
+    
 );
-
 }
 
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth debe usarse dentro de un AuthProvider");
+  }
+  return context;
+}

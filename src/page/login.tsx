@@ -4,60 +4,53 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 
-
 export default function Login() {
-    
-    // Obtener el contexto
   const authContext = useContext(AuthContext);
   if (!authContext) {
     throw new Error("Login must be used within an AuthProvider");
   }
   const { login } = authContext;
-    
-  // Hook de React Router para navegar programaticamente
-    const  navigate = useNavigate();
-    
-return (
-  <div className="min-h-screen flex flex-col md:flex-row">
-  {/* Panel izquierdo: imagen */}
-  <div
-    className="hidden md:flex w-1/2 bg-cover bg-center"
-    style={{
-      backgroundImage: "url('/fondoazul.jpg')",
-    }}
-  >
-    <div className="bg-black bg-opacity-50 w-full flex items-center justify-center">
-      <h2 className="text-white text-4xl font-bold px-4">
-        Bienvenido Pa'
-      </h2>
-    </div>
-  </div>
+  const navigate = useNavigate();
 
-  {/* Panel derecho: formulario */}
-  <div className="flex flex-col items-center justify-center w-full md:w-1/2 bg-blue-50">
-    <div className="w-full max-w-md p-8">
-      <div className="flex justify-center mb-6">
-        <FaUserCircle className="text-7xl text-gray-700" />
+  return (
+    <div className="d-flex vh-100">
+      {/* Panel izquierdo: imagen (oculto en xs, visible md) */}
+      <div
+        className="d-none d-md-flex flex-grow-1 bg-dark position-relative"
+        style={{
+          backgroundImage: "url('/fondoazul.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="bg-black bg-opacity-50 w-100 d-flex align-items-center justify-content-center position-absolute top-0 start-0 bottom-0 end-0">
+          <h2 className="text-white display-4 px-3">Bienvenido Pa'</h2>
+        </div>
       </div>
-      <h1 className="text-3xl font-bold text-center text-gray-800 mb-4">
-        Inicia Sesión
-      </h1>
-      <p className="text-center text-gray-600 mb-8">
-        Accede a tu panel de control con tu cuenta de Google
-      </p>
-      <GoogleLogin
-        onSuccess={(res) => {
-          if (res.credential) {
-            login(res.credential);
-            navigate("/dashboard");
-          }
-        }}
-        onError={() => {
-          alert("Fallo al iniciar sesión");
-        }}
-      />
+
+      {/* Panel derecho: formulario */}
+      <div className="d-flex flex-column justify-content-center align-items-center flex-grow-1 bg-light p-4">
+        <div className="w-100" style={{ maxWidth: "400px" }}>
+          <div className="d-flex justify-content-center mb-4">
+            <FaUserCircle className="text-secondary" style={{ fontSize: "4rem" }} />
+          </div>
+          <h1 className="text-center mb-3">Inicia Sesión</h1>
+          <p className="text-center text-muted mb-4">
+            Accede a tu panel de control con tu cuenta de Google
+          </p>
+          <GoogleLogin
+            onSuccess={(res) => {
+              if (res.credential) {
+                login(res.credential);
+                navigate("/dashboard");
+              }
+            }}
+            onError={() => {
+              alert("Fallo al iniciar sesión");
+            }}
+          />
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-);
+  );
 }
